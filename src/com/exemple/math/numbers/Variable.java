@@ -34,5 +34,7 @@ public class Variable extends Element {
 	public boolean isEqual(Element elem) {
 		return elem.getType() == ElementType.Variable && variable == ((Variable) elem).variable;
 	}
+
+	public void setValues(Element[] values) {}
     
 }

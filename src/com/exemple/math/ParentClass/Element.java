@@ -18,16 +18,18 @@ public abstract class Element {
     public abstract Element recipFunction(int[] path, Element curRecip);
 
     public abstract Element[] getValues();
+    public abstract void setValues(Element[] values);
     public abstract String toString();
     public abstract String toLaTeX();
 
     public abstract Element simplify();
     public abstract Element developing();
+    
 
     // #endregion
-
+    
     public static int[] newPath(int[] curPath) { return Arrays.copyOfRange(curPath, 1, curPath.length); }
-
+    
     public void findVariable(HashMap<String, VariableData> variables, int[] curPath)
     {
         if (getType() == ElementType.Variable)

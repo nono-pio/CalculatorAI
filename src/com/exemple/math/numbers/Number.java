@@ -40,8 +40,11 @@ public class Number extends Element{
 
 	@Override
 	public boolean isEqual(Element elem) {
+		System.out.println("fjsdhkjhdjdkd " + (elem.getType() == ElementType.Number));
 		return elem.getType() == ElementType.Number && isEqual((Number) elem);
 	}
+
+	public void setValues(Element[] values) {}
     
 
     

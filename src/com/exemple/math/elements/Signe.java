@@ -69,4 +69,9 @@ public class Signe extends Element{
         throw new UnsupportedOperationException("Unimplemented method 'developing'");
     }
     public String toLaTeX() { return (isNegate()? " - " : "") + value.toLaTeX(); }
+	public void setValues(Element[] values) {
+		this.value = values[0];
+		this.signe = values[1];
+		
+	}
 }

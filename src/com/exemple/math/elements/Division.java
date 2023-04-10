@@ -59,6 +59,9 @@ public class Division extends Element{
         throw new UnsupportedOperationException("Unimplemented method 'developing'");
     }
 
-    @Override
     public String toLaTeX() { return "\\frac{" + numerator.toLaTeX() + "}{"+ denominator.toLaTeX() +"}"; }
+	public void setValues(Element[] values) {
+		this.numerator = values[0];
+		this.denominator = values[1];
+	}
 }

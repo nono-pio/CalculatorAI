@@ -24,12 +24,12 @@ public class LaTex {
 		return this.icon;                         
     }
     
-    public TeXIcon remakeIconLaTex(String math, int valor){        
+    public TeXIcon remakeIconLaTex(String math, int valor, float width){
         this.math = math;            
 		this.formula = new TeXFormula(this.math);
 		this.icon = this.formula.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
 		        .setSize(valor)
-		        .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER)
+		        .setWidth(TeXConstants.UNIT_PIXEL, width, TeXConstants.ALIGN_CENTER)
 		        .setIsMaxWidth(true)
 		        .setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
 		return this.icon;

@@ -88,4 +88,6 @@ public class Addition extends Element{
         }
         return "\\left(" + str.toString() + "\\right)";
     }
+	
+	public void setValues(Element[] values) { this.values = values; }
 }

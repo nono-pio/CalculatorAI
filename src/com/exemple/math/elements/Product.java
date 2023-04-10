@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
 import com.exemple.math.numbers.Number;
+import com.exemple.math.tools.Tools;
 
 
 public class Product extends Element{
@@ -63,15 +64,29 @@ public class Product extends Element{
         return new Product(rest.toArray(new Element[rest.size()]));
     }
     public Element developing() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'developing'");
+        ArrayList<Element> notAdd = new ArrayList<Element>();
+        ArrayList<Element[]> addChildElement = new ArrayList<Element[]>();
+        for (Element elem : values) {
+			if (elem.getType() == ElementType.Addition)
+				addChildElement.add(elem.getValues());
+			else
+				notAdd.add(elem);
+		}
+        
+        ArrayList<Element[]> couples = Tools.getCouples(addChildElement, notAdd);
+        ArrayList<Element> addition = new ArrayList<Element>();
+        for (Element[] pro : couples) {
+        	addition.add(new Product(pro).simplify());
+		}
+        return new Addition(addition.toArray(new Element[addition.size()]));
     }
     public String toLaTeX() {
-        StringBuilder str = new StringBuilder( values[0].toString() );
+        StringBuilder str = new StringBuilder( values[0].toLaTeX() );
         for (int i = 1; i < values.length; i++) {
             str.append(" \\cdot " + values[i].toLaTeX() );
         }
         return "\\left(" + str.toString() + "\\right)";
     }
+	public void setValues(Element[] values) { this.values = values; }
     
 }

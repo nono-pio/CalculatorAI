@@ -13,13 +13,12 @@ public class Main {
 		
 		//Element div = new Division(new Addition(new Number(9), new Number(5)), new Product(new Variable("x"), new Number(1)));
 		
-		Element e1 = new Addition(new Number(1), new Number(2.99f));
-		Element e2 = new Addition(new Number(1), new Number(3));
-		System.out.print(e1.isEqual(e2));
-		
+		Product pro = new Product(new Addition(new Number(5), new Variable("x")), new Addition(new Number(2), new Variable("x")), new Variable("x"));
+		System.out.println(pro);
+		System.out.println(pro.developing());
 		//System.out.println(div);
-		//LaTex latex = new LaTex(div.toLaTeX() +" = "+div.simplify().toLaTeX());
+		LaTex latex = new LaTex(pro.toLaTeX() +" = "+pro.developing().toLaTeX());
 		
-		//new Frame("Title", latex, 600, 500, 100);
+		new Frame("Title", latex, 600, 500, 50);
 	}
 }

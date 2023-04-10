@@ -11,6 +11,11 @@ public class Frame {
 	
 	JFrame frame;
 	JLabel icon;
+	JSlider slider;
+	JTextField input;
+	
+	LaTex latex;
+	
 	int Width, Height;
 	int size;
 	
@@ -19,6 +24,8 @@ public class Frame {
 		Width = W;
 		Height = H;
 		size = latexSize;
+		
+		this.latex = latex;
 		
 		JPanel redPanel = new JPanel();
 		redPanel.setPreferredSize(new Dimension(100, 75));
@@ -35,31 +42,27 @@ public class Frame {
 		//greenPanel.setBackground(Color.green);
 		greenPanel.setLayout(new BorderLayout());
 		
-		JTextField input = new JTextField();
+		input = new JTextField();
 		input.setText(latex.math);
 		input.setPreferredSize(new Dimension(100, 100));
 		input.setFont(new Font("New Roman", Font.PLAIN, 15));
 		input.setHorizontalAlignment(JLabel.CENTER);
 		
 		JButton btn = new JButton();
-		btn.addActionListener((e) -> icon.setIcon(latex.remakeIconLaTex(input.getText(), size)));
+		btn.addActionListener((e) -> remakeLatex());
 		btn.setFocusable(false);
 		btn.setText("Validate");
 		btn.setPreferredSize(new Dimension(100,100));
 	
-		JSlider slider = new JSlider(1, 125, size);
+		slider = new JSlider(1, 125, size);
 		slider.setPaintTicks(true);
 		slider.setMinorTickSpacing(5);
 		slider.setMajorTickSpacing(25);
 		slider.setPaintLabels(true);
 		slider.setOrientation(SwingConstants.VERTICAL);
-		slider.addChangeListener((e) -> {
-			size = slider.getValue();
-			icon.setIcon(latex.remakeIconLaTex(latex.math, size));
-		});
+		slider.addChangeListener((e) -> { remakeLatex(); });
 		
 		icon = new JLabel();
-		icon.setIcon(latex.getIconLaTex(size));
 		icon.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 		icon.setHorizontalAlignment(JLabel.CENTER);
 		icon.setVerticalAlignment(JLabel.CENTER);
@@ -83,5 +86,11 @@ public class Frame {
 		
 		frame.setVisible(true);
 		
+		remakeLatex();
+	}
+	
+	private void remakeLatex()
+	{
+		icon.setIcon(latex.remakeIconLaTex(input.getText(), slider.getValue(), icon.getWidth()));
 	}
 }
