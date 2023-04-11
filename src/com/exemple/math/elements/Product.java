@@ -1,6 +1,7 @@
 package com.exemple.math.elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
@@ -41,39 +42,6 @@ public class Product extends Element{
 
         return values[path[0]].recipFunction(newPath(path), new Division(curRecip, new Product(div)));
     }
-    public Element simplify() {
-        Number cste = new Number(1);
-        ArrayList<Element> rest = new ArrayList<Element>();
-        for (Element child : values) {
-            Element childSim = child.simplify();
-            if ( childSim.getType() == ElementType.Number ) cste.mult((Number) childSim);
-            else rest.add(childSim);
-        }
-
-        if (cste.isZero()) return new Number(0);
-        if (rest.size() == 0) return cste;
-
-        if (!cste.isEqual(new Number(1))) rest.add(cste);
-        else if (rest.size() == 1) return rest.get(0);
-        return new Product(rest.toArray(new Element[rest.size()]));
-    }
-    public Element developing() {
-        ArrayList<Element> notAdd = new ArrayList<Element>();
-        ArrayList<Element[]> addChildElement = new ArrayList<Element[]>();
-        for (Element elem : values) {
-			if (elem.getType() == ElementType.Addition)
-				addChildElement.add(elem.getValues());
-			else
-				notAdd.add(elem);
-		}
-        
-        ArrayList<Element[]> couples = Tools.getCouples(addChildElement, notAdd);
-        ArrayList<Element> addition = new ArrayList<Element>();
-        for (Element[] pro : couples) {
-        	addition.add(new Product(pro).simplify());
-		}
-        return new Addition(addition.toArray(new Element[addition.size()]));
-    }
     public Number getCst()
     {
     	for (Element element : values) {
@@ -99,6 +67,41 @@ public class Product extends Element{
 		else return StringFormat.bracket(str, isLaTeX);
 	}
 	public Element clone() { return new Product(Tools.cloneElementArray(values)); }
-	public Element clonedSimplify() { return this; }
+	public Element clonedSimplify()
+	{
+		
+		ArrayList<Element> newChilds = new ArrayList<>();
+		for (Element child : values)
+		{
+			if (child.getType() == ElementType.Product)
+				newChilds.addAll(Arrays.asList(child.getValues()));
+			else newChilds.add(child);
+		}
+		values = newChilds.toArray(new Element[newChilds.size()]);
+		
+		Number cste = new Number(1);
+        ArrayList<Element> noAdd = new ArrayList<Element>();
+        ArrayList<Element[]> additionChildren = new ArrayList<Element[]>();
+        
+        for (Element child : values) {
+            if ( child.getType() == ElementType.Number ) cste.mult((Number) child);
+            else if (child.getType() == ElementType.Addition) additionChildren.add(child.getValues()); 
+            else noAdd.add(child);
+        }
+
+        if (cste.isZero()) return new Number(0);
+        if (!cste.isEqual(new Number(1))) noAdd.add(cste);
+        
+        if (additionChildren.size() == 0 && noAdd.size() == 1) return noAdd.get(0);
+        if (additionChildren.size() == 1 && noAdd.size() == 0) return new Addition(additionChildren.get(0)).clonedSimplify();
+        if (additionChildren.size() == 0) return new Product(noAdd.toArray( new Element[noAdd.size()] ));
+        
+        ArrayList<Element[]> couples = Tools.getCouples(additionChildren, noAdd);
+        ArrayList<Element> addition = new ArrayList<Element>();
+        for (Element[] couple : couples) {
+        	addition.add(new Product(couple).clonedSimplify());
+		}
+        return new Addition(addition.toArray(new Element[addition.size()])).clonedSimplify();
+	}
     
 }

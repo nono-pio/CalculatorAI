@@ -20,7 +20,7 @@ public class Addition extends Element{
     public Addition(Element value1, Element value2, boolean subtract)
     {
         if (subtract)
-            this.values = new Element[] {value1, new Signe(value2, true)};
+            this.values = new Element[] {value1, new Sign(value2, true)};
         else
             this.values = new Element[] {value1, value2};
     }
@@ -42,7 +42,7 @@ public class Addition extends Element{
         for (int i = 0; i < values.length; i++) {
             if (i != path[0])
             {
-                newRecip[index] = new Signe(values[i], true);
+                newRecip[index] = new Sign(values[i], true);
                 index++;
             }
         }

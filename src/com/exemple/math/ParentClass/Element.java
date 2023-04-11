@@ -14,7 +14,7 @@ public abstract class Element {
 
     public abstract ElementType getType();
 
-    public abstract Number toValue();
+	public abstract Number toValue();
     public abstract Element recipFunction(int[] path, Element curRecip);
 
     public abstract Element[] getValues();

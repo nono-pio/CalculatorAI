@@ -1,10 +1,12 @@
 package com.exemple.math.tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.exemple.math.ParentClass.Element;
+import com.exemple.math.ParentClass.ElementType;
 import com.exemple.math.elements.Product;
 import com.exemple.math.numbers.Number;
 
@@ -45,6 +47,13 @@ public class ElementCoef {
 	
 	public Element getElement(int index)
 	{
+		if (elements.get(index).getType() == ElementType.Product)
+		{
+			Element[] values = elements.get(index).getValues();
+			Element[] newValues = Arrays.copyOf(values, values.length + 1);
+			newValues[newValues.length - 1] = coefs.get(index);
+			return new Product(newValues).clonedSimplify();
+		}
 		return new Product(coefs.get(index), elements.get(index)).clonedSimplify();
 	}
 	

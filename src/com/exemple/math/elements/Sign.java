@@ -11,17 +11,17 @@ import com.exemple.math.tools.MathN;
  * Signe(a, 0) = a
  * Signe(a, PI) = Signe(a, true) = -a
 */
-public class Signe extends Element{
+public class Sign extends Element{
     
     public Element value;
     public Element signe;
 
-    public Signe(Element value, Element signe)
+    public Sign(Element value, Element signe)
     {
         this.value = value;
         this.signe = signe;
     }
-    public Signe(Element value, boolean negate)
+    public Sign(Element value, boolean negate)
     {
         this.value = value;
         this.signe = negate ? MathN.PI : new Number(0);
@@ -40,7 +40,7 @@ public class Signe extends Element{
         if (path[0] == 1) throw new RuntimeException("Tne signe cannot be a variable");
         Element x = path[0] == 0 ? value : signe;
         Element a = path[0] == 1 ? value : signe;
-        return x.recipFunction(newPath(path), new Division(curRecip, new Signe(new Number(1), a)));
+        return x.recipFunction(newPath(path), new Division(curRecip, new Sign(new Number(1), a)));
     }
     public Element[] getValues() { return new Element[] { value, signe }; }
     public Element simplify() {
@@ -58,10 +58,10 @@ public class Signe extends Element{
         {
             Number valN = (Number) valueSim;
             if (valN.isZero()) return new Number(0);
-            if ( signeSim.getType() == ElementType.Number ) return (new Signe(valueSim, signeSim)).toValue();
+            if ( signeSim.getType() == ElementType.Number ) return (new Sign(valueSim, signeSim)).toValue();
         }
 
-        return new Signe(valueSim, signeSim);
+        return new Sign(valueSim, signeSim);
     }
 	public void setValues(Element[] values) {
 		this.value = values[0];
@@ -70,7 +70,7 @@ public class Signe extends Element{
 	}
 
 	public String toString(ElementType parentType, boolean isLaTeX) { return (isNegate()? " - " : "") + value.toString(getType(), isLaTeX); }
-	public Element clone() { return new Signe(value.clone(), signe.clone()); }
+	public Element clone() { return new Sign(value.clone(), signe.clone()); }
 	@Override
 	public Element clonedSimplify() {
 		// TODO Auto-generated method stub
