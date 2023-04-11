@@ -1,10 +1,14 @@
 package com.exemple.math.elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
 import com.exemple.math.numbers.Number;
+import com.exemple.math.tools.StringFormat;
+import com.exemple.math.tools.Tools;
+import com.exemple.math.tools.ElementCoef;
 
 
 public class Addition extends Element{
@@ -32,17 +36,6 @@ public class Addition extends Element{
     }
     public Element[] getValues() {return values;}
     public ElementType getType() { return ElementType.Addition; }
-    public String toString() {
-        StringBuilder str = new StringBuilder(values[0].toString());
-        for (int i = 1; i < values.length; i++)
-        {
-            if ( values[i].getType() == ElementType.Signe && ((Signe) values[i]).isNegate())
-                str.append(values[i].toString());
-            else
-                str.append(" + " + values[i].toString());
-        }
-        return "(" + str.toString() + ")";
-    }
     public Element recipFunction(int[] path, Element curRecip) {
         Element[] newRecip = new Element[values.length];
         int index = 1;
@@ -57,37 +50,58 @@ public class Addition extends Element{
 
         return values[path[0]].recipFunction(newPath(path), new Addition(newRecip));
     }
-    public Element simplify()
-    {
-        Number cste = new Number(0);
-        ArrayList<Element> rest = new ArrayList<Element>();
-        for (Element child : values) {
-            Element childSim = child.simplify();
-            if (childSim.getType() == ElementType.Number)
-                cste.add((Number) childSim);
-            else
-                rest.add(childSim.simplify());
-        }
-
-        if (rest.size() == 0) return cste;
-        
-        if (!cste.isZero()) rest.add(cste);
-        return new Addition(rest.toArray( new Element[rest.size()]));
-    }
-    public Element developing() {
-        return null;
-    }
-    public String toLaTeX() {
-        StringBuilder str = new StringBuilder(values[0].toString());
-        for (int i = 1; i < values.length; i++)
-        {
-            if ( values[i].getType() == ElementType.Signe && ((Signe) values[i]).isNegate())
-                str.append(values[i].toLaTeX());
-            else
-                str.append(" + " + values[i].toLaTeX());
-        }
-        return "\\left(" + str.toString() + "\\right)";
-    }
 	
 	public void setValues(Element[] values) { this.values = values; }
+	public String toString(ElementType parentType, boolean isLaTeX) {
+		
+		String str = StringFormat.arrayStr(values, " + ", getType(), isLaTeX);
+		
+        if (parentType == null || parentType == ElementType.Division || parentType == ElementType.Addition) return str;
+        else return StringFormat.bracket(str, isLaTeX);
+	}
+	public Element clone() { return new Addition(Tools.cloneElementArray(values)); }
+	public Element clonedSimplify() {
+		
+		ArrayList<Element> newChilds = new ArrayList<>();
+		for (Element child : values)
+		{
+			if (child.getType() == ElementType.Addition)
+				newChilds.addAll(Arrays.asList(child.getValues()));
+			else newChilds.add(child);
+		}
+		values = newChilds.toArray(new Element[newChilds.size()]);
+		
+		Number cste = new Number(0);
+		ElementCoef elemCoef = new ElementCoef();
+        
+        for (Element child : values) {
+            if (child.getType() == ElementType.Number)
+                cste.add((Number) child);
+            else {
+            	Element elem;
+            	Number coef;
+            	if (child.getType() == ElementType.Product)
+            	{
+            		Product childPro = (Product) child;
+            		elem = childPro.getRest();
+            		coef = childPro.getCst();
+            	} else
+            	{
+            		elem = child;
+            		coef = new Number(1);
+            	}
+            	elemCoef.add(coef, elem);
+            }
+        }
+
+        if (elemCoef.size() == 0) return cste;
+        if (elemCoef.size() == 1 && cste.isZero()) return elemCoef.getElement(0);
+        
+        ArrayList<Element> newValues = elemCoef.getElements();
+        if (!cste.isZero()) newValues.add(cste);
+        
+        values = newValues.toArray(new Element[newValues.size()]);
+        
+        return this;
+	}
 }

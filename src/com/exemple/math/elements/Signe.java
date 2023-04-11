@@ -43,7 +43,6 @@ public class Signe extends Element{
         return x.recipFunction(newPath(path), new Division(curRecip, new Signe(new Number(1), a)));
     }
     public Element[] getValues() { return new Element[] { value, signe }; }
-    public String toString() { return (isNegate()? " - " : "") + value.toString(); }
     public Element simplify() {
         
         Element signeSim = signe.simplify();
@@ -64,14 +63,17 @@ public class Signe extends Element{
 
         return new Signe(valueSim, signeSim);
     }
-    public Element developing() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'developing'");
-    }
-    public String toLaTeX() { return (isNegate()? " - " : "") + value.toLaTeX(); }
 	public void setValues(Element[] values) {
 		this.value = values[0];
 		this.signe = values[1];
 		
+	}
+
+	public String toString(ElementType parentType, boolean isLaTeX) { return (isNegate()? " - " : "") + value.toString(getType(), isLaTeX); }
+	public Element clone() { return new Signe(value.clone(), signe.clone()); }
+	@Override
+	public Element clonedSimplify() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -19,56 +19,52 @@ public abstract class Element {
 
     public abstract Element[] getValues();
     public abstract void setValues(Element[] values);
-    public abstract String toString();
-    public abstract String toLaTeX();
-
-    public abstract Element simplify();
-    public abstract Element developing();
+    public abstract String toString(ElementType parentType, boolean isLaTeX);
+    public String toString() { return toString(null, false); }
+    public String toLaTeX() { return toString(null, true); }
     
+    public abstract Element clone();
+    public abstract Element clonedSimplify();
 
     // #endregion
+    
+    public Element simplify()
+    {
+    	Element cloneElement = clone();
+    	Element[] values = cloneElement.getValues();
+    	
+    	boolean isCst = true;
+    	Element[] valuesSimplified = new Element[values.length];
+    	for (int i = 0; i < values.length; i++) {
+    		valuesSimplified[i] = values[i].simplify();
+    		if (valuesSimplified[i].getType() != ElementType.Number) isCst = false;
+		}
+    	
+    	cloneElement.setValues(valuesSimplified);
+    	
+    	if (isCst) return cloneElement.toValue();
+    	
+    	return cloneElement.clonedSimplify();
+    }
     
     public static int[] newPath(int[] curPath) { return Arrays.copyOfRange(curPath, 1, curPath.length); }
     
     public void findVariable(HashMap<String, VariableData> variables, int[] curPath)
     {
-        if (getType() == ElementType.Variable)
+        Element[] childs = getValues();
+
+        int[] newPath = Arrays.copyOf(curPath, curPath.length + 1);
+
+        for (int i = 0; i < childs.length; i++)
         {
-            Variable variableElement = (Variable) this;
-            VariableData data = variables.get(variableElement.variable);
-
-            if (data == null) //no variable then create one else update
-            {
-                data = new VariableData(null);
-                data.variableCount = 1;
-                data.paths = new ArrayList<int[]>();
-            } else 
-            {
-                data.variableCount++;
-            }
-            
-            variableElement.variableData = data;
-            data.paths.add(curPath.clone());
-            variables.put(variableElement.variable, data);
-        } else
-        {
-            Element[] childs = getValues();
-
-            int[] newPath = Arrays.copyOf(curPath, curPath.length + 1);
-
-            for (int i = 0; i < childs.length; i++)
-            {
-                newPath[newPath.length - 1] = i;
-                childs[i].findVariable(variables, newPath);
-            }
+            newPath[newPath.length - 1] = i;
+            childs[i].findVariable(variables, newPath);
         }
     }
     public boolean isConstant()
     {
         if (getType() == ElementType.Variable) return false;
-    
-        for (Element child : getValues()) { if (child.isConstant() == false) return false; }
-
+        for (Element child : getValues()) if (child.isConstant() == false) return false;
         return true;
     }
 
@@ -92,11 +88,10 @@ public abstract class Element {
     	if (getType() != elem.getType()) return false;
     	Element[] values = getValues();
     	Element[] values2 = elem.getValues();
+    	
     	if (values.length != values2.length) return false;
     	for (int i=0; i < values.length; i++)
-    	{
     		if (!values[i].isEqual(values2[i])) return false;
-    	}
     	return true;
     }
 }

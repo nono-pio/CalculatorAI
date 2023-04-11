@@ -5,6 +5,7 @@ import com.exemple.math.ParentClass.ElementType;
 import com.exemple.math.numbers.Number;
 import com.exemple.math.tools.ErrorMessage;
 import com.exemple.math.tools.MathN;
+import com.exemple.math.tools.StringFormat;
 
 public class Division extends Element{
 
@@ -20,7 +21,6 @@ public class Division extends Element{
     public ElementType getType() { return ElementType.Division; }
     public Number toValue() { return MathN.div(numerator.toValue(), denominator.toValue()); }
     public Element[] getValues() { return new Element[] {numerator, denominator}; }
-    public String toString() { return "(" + numerator.toString() + "/" + denominator.toString() + ")"; }
     public Element recipFunction(int[] path, Element curRecip)
     {
         Element newRecip;
@@ -53,15 +53,24 @@ public class Division extends Element{
         return new Division(numSim, denSim);
     }
 
-    @Override
-    public Element developing() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'developing'");
-    }
-
     public String toLaTeX() { return "\\frac{" + numerator.toLaTeX() + "}{"+ denominator.toLaTeX() +"}"; }
 	public void setValues(Element[] values) {
 		this.numerator = values[0];
 		this.denominator = values[1];
+	}
+	public String toString(ElementType parentType, boolean isLaTeX) {
+		if (isLaTeX) return "\\frac{" + numerator.toLaTeX() + "}{"+ denominator.toLaTeX() +"}";
+		else {
+			String str = numerator.toString(getType(), isLaTeX) + "/" + denominator.toString(getType(), isLaTeX);
+			if (parentType == null || parentType == ElementType.Addition) return str;
+			else return StringFormat.bracket(str, isLaTeX);
+		}
+	}
+	public Element clone() { return new Division(numerator.clone(), denominator.clone()); }
+
+	@Override
+	public Element clonedSimplify() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

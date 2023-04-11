@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
 import com.exemple.math.numbers.Number;
+import com.exemple.math.tools.StringFormat;
 import com.exemple.math.tools.Tools;
 
 
@@ -26,13 +27,6 @@ public class Product extends Element{
         return prod;
     }
     public Element[] getValues() { return values; }
-    public String toString() {
-        StringBuilder str = new StringBuilder( values[0].toString() );
-        for (int i = 1; i < values.length; i++) {
-            str.append(" * " + values[i].toString() );
-        }
-        return "(" + str.toString() + ")";
-    }
     public Element recipFunction(int[] path, Element curRecip) {
         
         Element[] div = new Element[values.length - 1];
@@ -80,13 +74,31 @@ public class Product extends Element{
 		}
         return new Addition(addition.toArray(new Element[addition.size()]));
     }
-    public String toLaTeX() {
-        StringBuilder str = new StringBuilder( values[0].toLaTeX() );
-        for (int i = 1; i < values.length; i++) {
-            str.append(" \\cdot " + values[i].toLaTeX() );
-        }
-        return "\\left(" + str.toString() + "\\right)";
+    public Number getCst()
+    {
+    	for (Element element : values) {
+			if (element.getType() == ElementType.Number) return (Number) element;
+		}
+    	return new Number(1);
+    }
+    public Element getRest()
+    {
+    	ArrayList<Element> rest = new ArrayList<Element>();
+    	for (Element element : values) {
+			if (element.getType() != ElementType.Number) rest.add(element);
+		}
+    	if (rest.size() == 1) return rest.get(0);
+    	return new Product(rest.toArray(new Element[rest.size()]));
     }
 	public void setValues(Element[] values) { this.values = values; }
+	public String toString(ElementType parentType, boolean isLaTeX) {
+		
+		String str = StringFormat.arrayStr(values, isLaTeX? " \\cdot " : " * ", getType(), isLaTeX);
+		
+		if (parentType == null || parentType == ElementType.Addition) return str;
+		else return StringFormat.bracket(str, isLaTeX);
+	}
+	public Element clone() { return new Product(Tools.cloneElementArray(values)); }
+	public Element clonedSimplify() { return this; }
     
 }

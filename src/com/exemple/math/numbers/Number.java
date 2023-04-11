@@ -31,12 +31,8 @@ public class Number extends Element{
     public ElementType getType() { return ElementType.Number; }
     public Number toValue() { return this; }
     public Element[] getValues() { return new Element[0]; }
-    public String toString() { return String.valueOf(value); }
     public Number reciprocal(int[] path, Number value) { throw ErrorMessage.NumberRecip(); }
     public Element recipFunction(int[] path, Element curRecip) { throw ErrorMessage.NumberRecip(); }
-    public Element simplify() { return this; }
-    public Element developing() { return this; }
-    public String toLaTeX() { return toString(); }
 
 	@Override
 	public boolean isEqual(Element elem) {
@@ -45,7 +41,9 @@ public class Number extends Element{
 	}
 
 	public void setValues(Element[] values) {}
-    
-
-    
+	public String toString(ElementType parentType, boolean isLaTeX) { return String.valueOf(value); }
+	public Element clone() { return new Number(value); }
+	public Element clonedSimplify() { return this; }
+	@Override
+	public Element simplify() { return clone(); }
 }
