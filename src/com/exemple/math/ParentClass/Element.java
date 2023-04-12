@@ -21,7 +21,7 @@ public abstract class Element {
     public abstract void setValues(Element[] values);
     public abstract String toString(ElementType parentType, boolean isLaTeX);
     public String toString() { return toString(null, false); }
-    public String toLaTeX() { return toString(null, true); }
+    public String toLaTeX() { return toString(null, true); } 
     
     public abstract Element clone();
     public abstract Element clonedSimplify();

@@ -9,9 +9,10 @@ public class Number extends Element{
     public float value;
     public NumberType numberType;
 
-    public Number(float realNumber)
+    public Number(float realNumber) 
     {
-        value = realNumber;
+    	if (realNumber == 0) value = 0;
+    	else value = realNumber;
         numberType = NumberType.Real;
     }
 
@@ -22,8 +23,7 @@ public class Number extends Element{
 
     public boolean isEqual(Number num)
     {
-        if ( value == 0 && num.value == 0 ) return true;
-        return Math.abs((value - num.value) / (value + num.value)) * 2 <= 0.005; // if dif < 0.5%
+        return Math.abs(value - num.value) <= 0.005;
     }
     public boolean isZero() { return isEqual(new Number(0)); }
 
@@ -36,7 +36,6 @@ public class Number extends Element{
 
 	@Override
 	public boolean isEqual(Element elem) {
-		System.out.println("fjsdhkjhdjdkd " + (elem.getType() == ElementType.Number));
 		return elem.getType() == ElementType.Number && isEqual((Number) elem);
 	}
 

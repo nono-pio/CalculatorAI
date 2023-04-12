@@ -12,7 +12,7 @@ public class AritmeticSequence extends ParentElement{
     {
         super( new Element[] {sequence} );
         this.sequence = sequence;
-    }
+    } 
 
     public Number toValue() { return sequence.toValue(); }
 

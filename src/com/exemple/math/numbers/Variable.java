@@ -13,7 +13,7 @@ public class Variable extends Element {
     public VariableData variableData;
 
     public Variable(String variable)
-    {
+    { 
         this.variable = variable;
     }
 

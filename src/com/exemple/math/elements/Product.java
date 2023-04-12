@@ -8,6 +8,7 @@ import com.exemple.math.ParentClass.ElementType;
 import com.exemple.math.numbers.Number;
 import com.exemple.math.tools.StringFormat;
 import com.exemple.math.tools.Tools;
+import com.exemple.math.tools.ElementCoef;
 
 
 public class Product extends Element{
@@ -70,33 +71,58 @@ public class Product extends Element{
 	public Element clonedSimplify()
 	{
 		
-		ArrayList<Element> newChilds = new ArrayList<>();
+		ArrayList<Element> newChilds = new ArrayList<>(); // extends the values with child Product and Sign
 		for (Element child : values)
 		{
 			if (child.getType() == ElementType.Product)
 				newChilds.addAll(Arrays.asList(child.getValues()));
+			else if (child.getType() == ElementType.Sign)
+				newChilds.addAll(Arrays.asList(((Sign) child).toProduct().getValues()));
 			else newChilds.add(child);
 		}
 		values = newChilds.toArray(new Element[newChilds.size()]);
 		
+		// arrange child
 		Number cste = new Number(1);
-        ArrayList<Element> noAdd = new ArrayList<Element>();
+        ElementCoef elemCoef = new ElementCoef();
         ArrayList<Element[]> additionChildren = new ArrayList<Element[]>();
         
         for (Element child : values) {
             if ( child.getType() == ElementType.Number ) cste.mult((Number) child);
             else if (child.getType() == ElementType.Addition) additionChildren.add(child.getValues()); 
-            else noAdd.add(child);
+            else
+            {
+            	Element elem;
+            	Number coef;
+            	if (child.getType() == ElementType.Power && ((Power) child).exponent.getType() == ElementType.Number)
+            	{
+            		Power childPow = (Power) child;
+            		elem = childPow.base;
+            		coef = (Number) childPow.exponent;
+            	} else
+            	{
+            		elem = child;
+            		coef = new Number(1);
+            	}
+            	elemCoef.add(coef, elem);
+            }
         }
 
         if (cste.isZero()) return new Number(0);
-        if (!cste.isEqual(new Number(1))) noAdd.add(cste);
         
-        if (additionChildren.size() == 0 && noAdd.size() == 1) return noAdd.get(0);
-        if (additionChildren.size() == 1 && noAdd.size() == 0) return new Addition(additionChildren.get(0)).clonedSimplify();
-        if (additionChildren.size() == 0) return new Product(noAdd.toArray( new Element[noAdd.size()] ));
+        boolean hasCste = !cste.isEqual(new Number(1));
         
-        ArrayList<Element[]> couples = Tools.getCouples(additionChildren, noAdd);
+        if (additionChildren.size() == 0 && elemCoef.size() == 0) return cste;
+        
+        ArrayList<Element> pro = elemCoef.getElementsPower();
+        
+    	if (hasCste) pro.add(cste);
+    	if (additionChildren.size() == 0)
+    		return new Product(pro.toArray( new Element[pro.size()] ));
+    	
+        if (additionChildren.size() == 1 && pro.size() == 0) return new Addition(additionChildren.get(0)).clonedSimplify();
+        
+        ArrayList<Element[]> couples = Tools.getCouples(additionChildren, pro);
         ArrayList<Element> addition = new ArrayList<Element>();
         for (Element[] couple : couples) {
         	addition.add(new Product(couple).clonedSimplify());

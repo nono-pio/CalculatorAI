@@ -15,7 +15,7 @@ public class Equation extends ParentElement{
     {
         super( new Element[] { rightElement, leftElement } );
         this.rightElement = rightElement;
-        this.leftElement = leftElement;
+        this.leftElement = leftElement; 
     }
 
     public Number[] solveFor(String variable)

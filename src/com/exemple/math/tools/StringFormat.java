@@ -12,7 +12,7 @@ public final class StringFormat {
 		if (isLaTex) return "\\left(" + value + "\\right)";
 		else return "(" + value + ")";
 	}
-	
+	 
 	public static String arrayStr(Element[] values, String separator, ElementType type, boolean isLaTex)
 	{
 		StringBuilder str = new StringBuilder(values[0].toString(type, isLaTex));

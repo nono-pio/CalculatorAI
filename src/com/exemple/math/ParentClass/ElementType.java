@@ -4,9 +4,11 @@ public enum ElementType {
     Number,
     Variable,
 
-    Signe,
+    Sign,
 
     Addition,
     Product,
-    Division
+    Division,
+    Power,
+    Log
 }

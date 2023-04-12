@@ -12,7 +12,7 @@ public final class Tools {
 	public static ArrayList<Element[]> getCouples(Element[] curPath, ArrayList<Element[]> paths, int index, ArrayList<Element> base)
 	{
 		if (index >= paths.size())
-		{
+		{ 
 			ArrayList<Element[]> r = new ArrayList<>();
 			Element[] path = new Element[base.size() + curPath.length];
 			System.arraycopy(base.toArray(new Element[base.size()]), 0, path, 0, base.size());  

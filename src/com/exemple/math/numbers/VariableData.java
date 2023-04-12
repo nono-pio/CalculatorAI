@@ -11,7 +11,7 @@ public class VariableData {
     public VariableData(Number value)
     {
         this.variableCount = 1;
-        this.value = value;
+        this.value = value; 
     }
 
     @Override

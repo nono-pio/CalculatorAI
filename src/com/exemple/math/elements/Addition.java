@@ -67,6 +67,8 @@ public class Addition extends Element{
 		{
 			if (child.getType() == ElementType.Addition)
 				newChilds.addAll(Arrays.asList(child.getValues()));
+			else if (child.getType() == ElementType.Sign)
+				newChilds.add(((Sign) child).toProduct());
 			else newChilds.add(child);
 		}
 		values = newChilds.toArray(new Element[newChilds.size()]);
@@ -95,9 +97,9 @@ public class Addition extends Element{
         }
 
         if (elemCoef.size() == 0) return cste;
-        if (elemCoef.size() == 1 && cste.isZero()) return elemCoef.getElement(0);
+        if (elemCoef.size() == 1 && cste.isZero()) return elemCoef.getElementProduct(0);
         
-        ArrayList<Element> newValues = elemCoef.getElements();
+        ArrayList<Element> newValues = elemCoef.getElementsProduct();
         if (!cste.isZero()) newValues.add(cste);
         
         values = newValues.toArray(new Element[newValues.size()]);

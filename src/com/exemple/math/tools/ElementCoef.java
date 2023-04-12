@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
+import com.exemple.math.elements.Power;
 import com.exemple.math.elements.Product;
 import com.exemple.math.numbers.Number;
 
@@ -18,13 +19,13 @@ public class ElementCoef {
 	public ElementCoef()
 	{
 		elements = new ArrayList<>();
-		coefs = new ArrayList<>();
+		coefs = new ArrayList<>(); 
 	}
 	
 	public void add(Number coef, Element value)
 	{
 		int index = -1;
-		for (int i = 0; i < elements.size(); i++) {
+		for (int i = 0; i < elements.size(); i++) { 
 			if (elements.get(i).isEqual(value))
 			{
 				index = i;
@@ -45,8 +46,10 @@ public class ElementCoef {
 		return elements.size();
 	}
 	
-	public Element getElement(int index)
+	public Element getElementProduct(int index)
 	{
+		if (coefs.get(index).isEqual(new Number(1)))
+			return elements.get(index).clonedSimplify();
 		if (elements.get(index).getType() == ElementType.Product)
 		{
 			Element[] values = elements.get(index).getValues();
@@ -57,13 +60,28 @@ public class ElementCoef {
 		return new Product(coefs.get(index), elements.get(index)).clonedSimplify();
 	}
 	
-	public ArrayList<Element> getElements()
+	public Element getElementPower(int index)
+	{
+		if (coefs.get(index).isEqual(new Number(1)))
+			return elements.get(index).clonedSimplify();
+		return new Power(elements.get(index), coefs.get(index)).clonedSimplify();
+	}
+	
+	public ArrayList<Element> getElementsProduct()
 	{
 		ArrayList<Element> newElements = new ArrayList<Element>();
 		for (int i = 0; i < elements.size(); i++) {
-			newElements.add(getElement(i));
+			newElements.add(getElementProduct(i));
 		}
 		return newElements;
 	}
 
+	public ArrayList<Element> getElementsPower()
+	{
+		ArrayList<Element> newElements = new ArrayList<Element>();
+		for (int i = 0; i < elements.size(); i++) {
+			newElements.add(getElementPower(i));
+		}
+		return newElements;
+	}
 }

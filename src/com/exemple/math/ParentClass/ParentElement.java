@@ -11,7 +11,7 @@ public abstract class ParentElement {
     
     public HashMap<String, VariableData> variables;
 
-    public ParentElement(Element[] sequences)
+    public ParentElement(Element[] sequences) 
     {
         // find variable
         variables = new HashMap<String, VariableData>();
