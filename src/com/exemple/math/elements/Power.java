@@ -53,6 +53,8 @@ public class Power extends Element {
 			Number exp = (Number) exponent;
 			if (exp.isEqual(new Number(1))) return base.clonedSimplify();
 			else if (exp.isEqual(new Number(0))) return new Number(1);
+			
+			
 		}
 		
 		if (exponent.getType() == ElementType.Log)

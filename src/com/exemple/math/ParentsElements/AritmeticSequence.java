@@ -10,8 +10,8 @@ public class AritmeticSequence extends ParentElement{
     
     public AritmeticSequence(Element sequence)
     {
-        super( new Element[] {sequence} );
-        this.sequence = sequence;
+        super( new Element[] {sequence.clone()} );
+        this.sequence = sequence.clone();
     } 
 
     public Number toValue() { return sequence.toValue(); }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class VariableData {
 
     public int variableCount;
-    public ArrayList<int[]> paths;
+    public ArrayList<int[]> paths = new ArrayList<>();
     public Number value;
     
     public VariableData(Number value)
@@ -17,7 +17,7 @@ public class VariableData {
     @Override
     public String toString() //str = "x= val=3; count=2; paths=[1-2-3; 2-3-4]"
     {
-        if (paths == null) return value +"; count=" +variableCount;
+        if (paths == null || paths.size() == 0) return value +"; count=" +variableCount;
         StringBuilder strPaths = new StringBuilder(toStringPath(0));
 
         for (int i = 1; i < paths.size(); i++) {

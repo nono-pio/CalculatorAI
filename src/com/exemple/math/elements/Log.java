@@ -51,8 +51,9 @@ public class Log extends Element {
 		else return str;
 	}
 	public Element clone() { return new Log(base.clone(), value.clone()); }
-	public Element clonedSimplify() {
-		return this;
+	public Element clonedSimplify() { return this;
+		
+		
 	}
 
 }

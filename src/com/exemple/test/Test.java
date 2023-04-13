@@ -2,48 +2,80 @@ package com.exemple.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import com.exemple.math.ParentClass.Element;
+import com.exemple.math.elements.Addition;
+import com.exemple.math.elements.Product;
+import com.exemple.math.numbers.*;
+import com.exemple.math.numbers.Number;
 
 public class Test {
 
 	public static void main(String[] args) {
 		
-		int[] n = new int[] {1, 2};
-		int[] n1 = new int[] {1, 2};
-		int[] n2 = new int[] {1, 2, 3};
-		int[][] m = new int[][] {n, n1, n2};
+		Element[] adds = new Element[] {
+				new Variable("a"),
+				new Variable("b"),
+				new Variable("c")
+		};
 		
-		int[] base = new int[] {};
+		//int n = 3;
+		//float coef = 1;
+		//for (int k = 0; k <= n; k++) {
+			
+		//	System.out.print(coef + " * ");
+		//	System.out.print(adds[0] + "^" + k + " * ");
+		//	System.out.println(adds[1] + "^" + (n - k) + " + " );
+			
+		//	coef *= (n - k)/ (float) (k + 1);
+		//}
 		
-		ArrayList<int[]> couples = getCouples(m, base);
-		for (int[] is : couples) {
-			for (int is2 : is) {
-				System.out.print(is2 + "-");
+		int n = 2;
+		
+		Element[] add = new Element[n];
+		for (int i = 0; i < n; i++) {
+			add[i] = new Addition(adds);
+		}
+		System.out.println(new Product(add).simplify());
+		
+		ArrayList<ArrayList<Integer>> k = getCoefs(n, n);
+		System.out.println(k);
+		for (ArrayList<Integer> arrayList : k) {
+			int pro = 1;
+			for (Integer i : arrayList) {
+				pro *= fac(i);
 			}
+			System.out.print(fac(n) / pro + " ");
 			System.out.println();
 		}
-
 	}
 	
-	public static ArrayList<int[]> getCouples(int[][] couplesList, int[] base)
-	{ return getCouples(new int[couplesList.length], couplesList, 0, base); }
-	
-	public static ArrayList<int[]> getCouples(int[] curPath, int[][] paths, int index, int[] base)
+	public static int fac(int i)
 	{
-		if (index >= paths.length)
+		if (i == 0 || i == 1) return 1;
+		else return i * fac(i-1);
+	}
+	
+	public static ArrayList<ArrayList<Integer>> getCoefs(int n, int max)
+	{
+		ArrayList<ArrayList<Integer>> coefs = new ArrayList<ArrayList<Integer>>();
+		if (max >= n)
 		{
-			ArrayList<int[]> r = new ArrayList<>();
-			int[] path = new int[base.length + curPath.length];
-			System.arraycopy(base, 0, path, 0, base.length);  
-			System.arraycopy(curPath, 0, path, base.length, curPath.length); 
-			r.add(path);
-			return r;
-		}
-		ArrayList<int[]> couples = new ArrayList<int[]>();
-		for (int path : paths[index]) {
-			curPath[index] = path;
-			couples.addAll(getCouples(curPath, paths, index + 1, base));
+			ArrayList<Integer> coef1 = new ArrayList<Integer>();
+			coef1.add(n);
+			coefs.add(coef1);
 		}
 		
-		return couples;
+		int start = max < n? max : n - 1; 
+		for (int i = start; i > 0; i--) {
+			int dif = n - i;
+			ArrayList<ArrayList<Integer>> subCoefs = getCoefs(dif, i);
+			for (ArrayList<Integer> arrayList : subCoefs) {
+				arrayList.add(0, i);
+			}
+			coefs.addAll(subCoefs);
+		}
+		
+		return coefs;
 	}
+	
 }

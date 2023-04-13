@@ -15,6 +15,12 @@ public class Variable extends Element {
     public Variable(String variable)
     { 
         this.variable = variable;
+        variableData = GlobalVariable.setVariable(variable, null);
+    }
+    public Variable(String variable, VariableData data)
+    { 
+        this.variable = variable;
+        variableData = data;
     }
 
     public ElementType getType() { return ElementType.Variable; }
@@ -28,7 +34,7 @@ public class Variable extends Element {
         else throw ErrorMessage.NumberRecip();
     }
     public Element recipFunction(int[] path, Element curRecip) { return curRecip; }
-	public Element clone() { return new Variable(variable); }
+	public Element clone() { return new Variable(variable, variableData); }
 
 	@Override
 	public boolean isEqual(Element elem) {
@@ -38,24 +44,11 @@ public class Variable extends Element {
 	public void setValues(Element[] values) {}
 	public String toString(ElementType parentType, boolean isLaTeX) { return variable; }
 	
-	@Override
-	public void findVariable(HashMap<String, VariableData> variables, int[] curPath) {
-		
-        VariableData data = variables.get(variable);
-
-        if (data == null) //no variable then create one / else update
-        {
-            data = new VariableData(null);
-            data.variableCount = 1;
-            data.paths = new ArrayList<int[]>();
-        } else 
-        {
-            data.variableCount++;
-        }
-        
-        variableData = data;
-        data.paths.add(curPath.clone());
-        variables.put(variable, data);
+	public void setVariable(HashMap<String, VariableData> variables, int[] curPath, Number value) {
+        variableData = GlobalVariable.setVariable(variable, null, variables);
+        variableData.paths.add(curPath.clone());
+        variableData.variableCount = variableData.paths.size();
+        variableData.value = value;
 	}
 	public Element clonedSimplify() { return this; }
 	@Override

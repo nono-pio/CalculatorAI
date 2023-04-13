@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.exemple.math.numbers.Number;
 import com.exemple.math.numbers.VariableData;
+import com.exemple.math.numbers.Variable;
 import com.exemple.math.tools.ErrorMessage;
 
 
@@ -15,11 +16,6 @@ public abstract class ParentElement {
     {
         // find variable
         variables = new HashMap<String, VariableData>();
-
-        for (int i = 0; i < sequences.length; i++) {
-            int[] path = new int[] {i};
-            sequences[i].findVariable(variables, path);
-        }
     }
 
     public abstract String toString();
@@ -27,11 +23,12 @@ public abstract class ParentElement {
 
     public void setVariable(String variable, Number value)
     {
-        VariableData data = variables.get(variable);
-        if (data == null) throw ErrorMessage.NoVariable(variable);
-        data.value = value;
-        VariableData dataStore = variables.put(variable, data);
-        if (dataStore == null) throw ErrorMessage.NoVariable(variable);
+        forEach((e, p) -> {
+        	if (e.getType() == ElementType.Variable && ((Variable) e).variable == variable)
+        	{
+        		((Variable) e).setVariable(variables, p, value);
+        	}
+        });
     }
 
     public Element getChild(int[] path)

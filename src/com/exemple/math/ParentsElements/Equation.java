@@ -1,5 +1,6 @@
 package com.exemple.math.ParentsElements;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import com.exemple.math.ParentClass.*;
 import com.exemple.math.numbers.*;
@@ -10,19 +11,20 @@ public class Equation extends ParentElement{
     
     public Element rightElement;
     public Element leftElement;
+    
+    public static VariableData dataCurSolve;
 
     public Equation(Element rightElement, Element leftElement)
     {
-        super( new Element[] { rightElement, leftElement } );
-        this.rightElement = rightElement;
-        this.leftElement = leftElement; 
+        super( new Element[] { rightElement.clone(), leftElement.clone() } );
+        this.rightElement = rightElement.clone();
+        this.leftElement = leftElement.clone(); 
     }
 
     public Number[] solveFor(String variable)
     {
-        VariableData varData = variables.get(variable);
-        if (varData == null) throw ErrorMessage.NoVariable(variable);
-
+        VariableData varData = getData(variable);
+        if (varData.variableCount == 0) throw ErrorMessage.NoVariable(variable);
         if (varData.variableCount == 1)
         {
             int[] path = varData.paths.get(0);
@@ -40,21 +42,37 @@ public class Equation extends ParentElement{
 
         return null;
     }
+    
+    public VariableData getData(String variable)
+    {
+    	if (dataCurSolve == null) dataCurSolve = new VariableData(null);
+    	dataCurSolve.variableCount = 0;
+    	dataCurSolve.paths = new ArrayList<int[]>();
+    	forEach((e, p) -> {
+    		if (e.getType() == ElementType.Variable && ((Variable) e).variable == variable)
+    		{
+    			Equation.dataCurSolve.variableCount++;
+    			Equation.dataCurSolve.paths.add(p.clone());
+    		}
+    	});
+    	return dataCurSolve;
+    }
 
     public boolean isTrue() { return rightElement.toValue().isEqual(leftElement.toValue()); }
 
     @Override
     public String toString() { return rightElement.toString() + " = " + leftElement.toString(); }
-
+    public String toLaTeX() { return rightElement.toLaTeX() + " = " + leftElement.toLaTeX(); }
+    
     @Override
     public Element[] getSequences() { return new Element[] {rightElement, leftElement}; }
 
     public Element getRecipFunc(String variable)
     {
 
-        VariableData data = variables.get(variable);
+        VariableData data = getData(variable);
         if (data.variableCount != 1) return null;
-
+        
         int[] path = data.paths.get(0);
 
         Element reciprocal = path[0] == 0 ? leftElement : rightElement;

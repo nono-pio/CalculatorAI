@@ -1,8 +1,7 @@
 TODO :
- - Global Variable
  - Polynôme 
  - Div euclidienne
  - Div.cloneSimplify
- - Power developpement (a + b) ^ n
+ - Power developpement S(x_i) ^ n
  - Log.cloneSimplify
  - sort addition and product

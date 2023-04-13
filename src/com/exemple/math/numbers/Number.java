@@ -26,7 +26,7 @@ public class Number extends Element{
         return Math.abs(value - num.value) <= 0.005;
     }
     public boolean isZero() { return isEqual(new Number(0)); }
-
+    public boolean isInteger() { return isEqual( new Number(Math.round(value))); }
 
     public ElementType getType() { return ElementType.Number; }
     public Number toValue() { return this; }

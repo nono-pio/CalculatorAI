@@ -9,7 +9,7 @@ import com.exemple.math.numbers.Variable;
 import com.exemple.math.numbers.VariableData;
 
 public abstract class Element {
-    
+	
     // #region Abstract Method
 
     public abstract ElementType getType();
@@ -49,18 +49,6 @@ public abstract class Element {
     
     public static int[] newPath(int[] curPath) { return Arrays.copyOfRange(curPath, 1, curPath.length); }
     
-    public void findVariable(HashMap<String, VariableData> variables, int[] curPath)
-    {
-        Element[] childs = getValues();
-
-        int[] newPath = Arrays.copyOf(curPath, curPath.length + 1);
-
-        for (int i = 0; i < childs.length; i++)
-        {
-            newPath[newPath.length - 1] = i;
-            childs[i].findVariable(variables, newPath);
-        }
-    }
     public boolean isConstant()
     {
         if (getType() == ElementType.Variable) return false;
