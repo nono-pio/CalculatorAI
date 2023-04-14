@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
+import com.exemple.math.math.MathN;
 import com.exemple.math.numbers.Number;
-import com.exemple.math.tools.MathN;
 
 /*
  * a = value ; b = sign

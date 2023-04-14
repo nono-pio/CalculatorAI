@@ -1,4 +1,4 @@
-package com.exemple.math.tools;
+package com.exemple.math.math;
 
 import com.exemple.math.numbers.Number;
 

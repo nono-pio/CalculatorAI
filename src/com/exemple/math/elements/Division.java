@@ -2,9 +2,9 @@ package com.exemple.math.elements;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
+import com.exemple.math.math.MathN;
 import com.exemple.math.numbers.Number;
 import com.exemple.math.tools.ErrorMessage;
-import com.exemple.math.tools.MathN;
 import com.exemple.math.tools.StringFormat;
 
 public class Division extends Element{

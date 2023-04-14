@@ -5,6 +5,8 @@ import java.util.Arrays;
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.elements.Addition;
 import com.exemple.math.elements.Product;
+import com.exemple.math.math.AdditionExtention;
+import com.exemple.math.math.Factorial;
 import com.exemple.math.numbers.*;
 import com.exemple.math.numbers.Number;
 
@@ -30,52 +32,50 @@ public class Test {
 		//}
 		
 		int n = 2;
+		int m = adds.length;
 		
-		Element[] add = new Element[n];
-		for (int i = 0; i < n; i++) {
-			add[i] = new Addition(adds);
+		for (int i = n; i > 0; i--) {
+			int[] couple = new int[m];
+			couple[0] = i;
+			//System.out.println(Arrays.toString(couple));
 		}
-		System.out.println(new Product(add).simplify());
 		
-		ArrayList<ArrayList<Integer>> k = getCoefs(n, n);
-		System.out.println(k);
-		for (ArrayList<Integer> arrayList : k) {
-			int pro = 1;
-			for (Integer i : arrayList) {
-				pro *= fac(i);
+		ArrayList<int[]> kVector = getCouples(n, m);
+		kVector.forEach((v) -> System.out.print(Arrays.toString(v)));
+		System.out.println();
+		
+		int[] facArray = Factorial.factorialArray(n);
+		for (int[] k : kVector) {
+			System.out.print(Factorial.multinome(n, k, facArray) + " ");
+			for (int i = 0; i < k.length; i++) {
+				System.out.print(" * " + adds[i] + " ^ " + k[i]);
 			}
-			System.out.print(fac(n) / pro + " ");
-			System.out.println();
+			System.out.println(" + ");
 		}
+		
+		System.out.println(AdditionExtention.Power(new Addition(adds), n));
 	}
 	
-	public static int fac(int i)
+	public static ArrayList<int[]> getCouples(int n, int length)
 	{
-		if (i == 0 || i == 1) return 1;
-		else return i * fac(i-1);
-	}
-	
-	public static ArrayList<ArrayList<Integer>> getCoefs(int n, int max)
-	{
-		ArrayList<ArrayList<Integer>> coefs = new ArrayList<ArrayList<Integer>>();
-		if (max >= n)
+		ArrayList<int[]> couples = new ArrayList<>();
+		if (n == 0)
 		{
-			ArrayList<Integer> coef1 = new ArrayList<Integer>();
-			coef1.add(n);
-			coefs.add(coef1);
+			couples.add(new int[length]);
+			return couples;
+		} else if (length == 1)
+		{
+			couples.add(new int[] {n});
+			return couples;
 		}
-		
-		int start = max < n? max : n - 1; 
-		for (int i = start; i > 0; i--) {
-			int dif = n - i;
-			ArrayList<ArrayList<Integer>> subCoefs = getCoefs(dif, i);
-			for (ArrayList<Integer> arrayList : subCoefs) {
-				arrayList.add(0, i);
+		for (int i = 0; i <= n; i++) {
+			ArrayList<int[]> subCouples = getCouples(n - i, length - 1);
+			for (int[] subCouple : subCouples) {
+				int[] newSubCouple = Arrays.copyOf(subCouple, subCouple.length + 1);
+				newSubCouple[newSubCouple.length - 1] = i;
+				couples.add(newSubCouple);
 			}
-			coefs.addAll(subCoefs);
 		}
-		
-		return coefs;
+		return couples;
 	}
-	
 }

@@ -7,10 +7,10 @@ import com.exemple.math.ParentClass.*;
 import com.exemple.math.ParentsElements.AritmeticSequence;
 import com.exemple.math.ParentsElements.Equation;
 import com.exemple.math.elements.*;
+import com.exemple.math.math.MathN;
 import com.exemple.math.numbers.GlobalVariable;
 import com.exemple.math.numbers.Number;
 import com.exemple.math.numbers.Variable;
-import com.exemple.math.tools.MathN;
 
 public class Main {
 
@@ -24,6 +24,7 @@ public class Main {
 		Equation pythagore = new Equation(new Power(new Variable("a"), new Number(2)), pyt);
 		
 		pythagore.setVariable("b", new Number(6));
+		pythagore.setVariable("c", new Number(6));
 		
 		//System.out.println(GlobalVariable.globalVariables);
 		System.out.println(pythagore.variables);
@@ -31,7 +32,7 @@ public class Main {
 		//Element a = pythagore.getRecipFunc("a");
 		
 		System.out.println();
-		System.out.println(pythagore);
+		System.out.println(pythagore.getRecipFunc("a").toValue());
 		//System.out.println(a);
 		//System.out.println(a.toValue());
 		//System.out.println(addSim);
