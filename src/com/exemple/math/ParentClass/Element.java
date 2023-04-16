@@ -1,18 +1,15 @@
 package com.exemple.math.ParentClass;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import com.exemple.math.numbers.Number;
-import com.exemple.math.numbers.Variable;
-import com.exemple.math.numbers.VariableData;
+import com.exemple.math.tools.Position;
 
-public abstract class Element {
+public abstract class Element implements Comparable<Element> {
 	
     // #region Abstract Method
 
-    public abstract ElementType getType();
+	public abstract ElementType getType();
 
 	public abstract Number toValue();
     public abstract Element recipFunction(int[] path, Element curRecip);
@@ -27,6 +24,13 @@ public abstract class Element {
     public abstract Element clonedSimplify();
 
     // #endregion
+    
+    public int compareTo(Element element2) {
+		
+    	if (getType() != element2.getType()) return getType().compareTo(element2.getType());
+    	
+		return Arrays.compare(getValues(), element2.getValues());
+	}
     
     public Element simplify()
     {
@@ -58,17 +62,14 @@ public abstract class Element {
 
     public void forEach(IElement func)
     {
-        int[] path = new int[] {0};
-        forEachChild(func, path);
+        forEachChild(func, new Position(0));
     }
-    public void forEachChild(IElement func, int[] path)
+    public void forEachChild(IElement func, Position position)
     {
-        func.invoke(this, path);
-        int[] newPath = Arrays.copyOf(path, path.length + 1);
+        func.invoke(this, position);
         Element[] childs = getValues();
         for (int i = 0; i < childs.length; i++) {
-            newPath[newPath.length - 1] = i;
-            childs[i].forEachChild(func, newPath);
+            childs[i].forEachChild(func, position.generateNewPosition(getType(), i));
         }
     }
     public boolean isEqual(Element elem)

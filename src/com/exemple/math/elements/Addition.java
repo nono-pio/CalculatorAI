@@ -97,12 +97,13 @@ public class Addition extends Element{
         }
 
         if (elemCoef.size() == 0) return cste;
-        if (elemCoef.size() == 1 && cste.isZero()) return elemCoef.getElementProduct(0);
+        if (elemCoef.size() == 1 && cste.isZero()) return elemCoef.getElementProduct(0).clonedSimplify();
         
         ArrayList<Element> newValues = elemCoef.getElementsProduct();
         if (!cste.isZero()) newValues.add(cste);
         
         values = newValues.toArray(new Element[newValues.size()]);
+        Arrays.sort(values);
         
         return this;
 	}

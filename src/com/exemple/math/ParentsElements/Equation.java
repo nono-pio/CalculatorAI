@@ -52,7 +52,7 @@ public class Equation extends ParentElement{
     		if (e.getType() == ElementType.Variable && ((Variable) e).variable == variable)
     		{
     			Equation.dataCurSolve.variableCount++;
-    			Equation.dataCurSolve.paths.add(p.clone());
+    			Equation.dataCurSolve.paths.add(p.getPath().clone());
     		}
     	});
     	return dataCurSolve;

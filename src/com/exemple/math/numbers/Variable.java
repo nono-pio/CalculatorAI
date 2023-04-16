@@ -1,6 +1,5 @@
 package com.exemple.math.numbers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.exemple.math.ParentClass.Element;
@@ -39,6 +38,13 @@ public class Variable extends Element {
 	@Override
 	public boolean isEqual(Element elem) {
 		return elem.getType() == ElementType.Variable && variable == ((Variable) elem).variable;
+	}
+	
+    @Override
+	public int compareTo(Element element2) {
+		if (element2.getType() != getType()) return getType().compareTo(element2.getType());
+		Variable var = (Variable) element2;
+		return variable.compareTo(var.variable);
 	}
 
 	public void setValues(Element[] values) {}

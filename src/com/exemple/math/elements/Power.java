@@ -2,6 +2,7 @@ package com.exemple.math.elements;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
+import com.exemple.math.math.AdditionExtention;
 import com.exemple.math.math.MathN;
 import com.exemple.math.numbers.Number;
 import com.exemple.math.tools.StringFormat;
@@ -53,8 +54,8 @@ public class Power extends Element {
 			Number exp = (Number) exponent;
 			if (exp.isEqual(new Number(1))) return base.clonedSimplify();
 			else if (exp.isEqual(new Number(0))) return new Number(1);
-			
-			
+			else if (exp.isInteger() && base.getType() == ElementType.Addition)
+				return AdditionExtention.Power((Addition) base, exp.toInteger()).simplify();
 		}
 		
 		if (exponent.getType() == ElementType.Log)

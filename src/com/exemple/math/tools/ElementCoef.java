@@ -2,8 +2,6 @@ package com.exemple.math.tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;

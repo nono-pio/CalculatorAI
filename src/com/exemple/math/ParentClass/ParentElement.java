@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.exemple.math.numbers.Number;
 import com.exemple.math.numbers.VariableData;
 import com.exemple.math.numbers.Variable;
-import com.exemple.math.tools.ErrorMessage;
+import com.exemple.math.tools.Position;
 
 
 public abstract class ParentElement {
@@ -26,7 +26,7 @@ public abstract class ParentElement {
         forEach((e, p) -> {
         	if (e.getType() == ElementType.Variable && ((Variable) e).variable == variable)
         	{
-        		((Variable) e).setVariable(variables, p, value);
+        		((Variable) e).setVariable(variables, p.getPath(), value);
         	}
         });
     }
@@ -45,10 +45,8 @@ public abstract class ParentElement {
     public void forEach(IElement func)
     {
         Element[] sequences = getSequences();
-        int[] path = new int[]{0};
         for (int i = 0; i < sequences.length; i++) {
-            path[0] = i;
-            sequences[i].forEachChild(func, path);
+            sequences[i].forEachChild(func, new Position(i));
         }
     }
 }

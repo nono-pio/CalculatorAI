@@ -5,6 +5,8 @@ public enum ElementType {
     Variable,
 
     Sign,
+    
+    Polynome,
 
     Addition,
     Product,

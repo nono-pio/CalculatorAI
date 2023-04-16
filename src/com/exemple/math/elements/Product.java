@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
+import com.exemple.math.math.AdditionExtention;
 import com.exemple.math.numbers.Number;
 import com.exemple.math.tools.StringFormat;
 import com.exemple.math.tools.Tools;
@@ -85,11 +86,11 @@ public class Product extends Element{
 		// arrange child
 		Number cste = new Number(1);
         ElementCoef elemCoef = new ElementCoef();
-        ArrayList<Element[]> additionChildren = new ArrayList<Element[]>();
+        ArrayList<Addition> additionChildren = new ArrayList<Addition>();
         
         for (Element child : values) {
             if ( child.getType() == ElementType.Number ) cste.mult((Number) child);
-            else if (child.getType() == ElementType.Addition) additionChildren.add(child.getValues()); 
+            else if (child.getType() == ElementType.Addition) additionChildren.add((Addition) child); 
             else
             {
             	Element elem;
@@ -118,16 +119,15 @@ public class Product extends Element{
         
     	if (hasCste) pro.add(cste);
     	if (additionChildren.size() == 0)
-    		return new Product(pro.toArray( new Element[pro.size()] ));
+    	{
+    		Element[] newPro = pro.toArray( new Element[pro.size()]);
+    		Arrays.sort(newPro);
+    		return new Product(newPro);
+    	}
     	
-        if (additionChildren.size() == 1 && pro.size() == 0) return new Addition(additionChildren.get(0)).clonedSimplify();
+        if (additionChildren.size() == 1 && pro.size() == 0) return additionChildren.get(0).clonedSimplify();
         
-        ArrayList<Element[]> couples = Tools.getCouples(additionChildren, pro);
-        ArrayList<Element> addition = new ArrayList<Element>();
-        for (Element[] couple : couples) {
-        	addition.add(new Product(couple).clonedSimplify());
-		}
-        return new Addition(addition.toArray(new Element[addition.size()])).clonedSimplify();
+        return AdditionExtention.Product(additionChildren.toArray(new Addition[additionChildren.size()]), pro).simplify();
 	}
     
 }

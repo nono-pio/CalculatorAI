@@ -3,7 +3,6 @@ package com.exemple.math.numbers;
 import java.util.HashMap;
 
 import com.exemple.math.ParentClass.ParentElement;
-import com.exemple.math.tools.ErrorMessage;
 
 public final class GlobalVariable {
 
