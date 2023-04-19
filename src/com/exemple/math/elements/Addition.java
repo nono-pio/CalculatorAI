@@ -20,7 +20,7 @@ public class Addition extends Element{
     public Addition(Element value1, Element value2, boolean subtract)
     {
         if (subtract)
-            this.values = new Element[] {value1, new Sign(value2, true)};
+            this.values = new Element[] {value1, new Product(new Number(-1), value2)};
         else
             this.values = new Element[] {value1, value2};
     }
@@ -42,7 +42,7 @@ public class Addition extends Element{
         for (int i = 0; i < values.length; i++) {
             if (i != path[0])
             {
-                newRecip[index] = new Sign(values[i], true);
+                newRecip[index] = new Product(new Number(-1), values[i]);
                 index++;
             }
         }
@@ -67,8 +67,6 @@ public class Addition extends Element{
 		{
 			if (child.getType() == ElementType.Addition)
 				newChilds.addAll(Arrays.asList(child.getValues()));
-			else if (child.getType() == ElementType.Sign)
-				newChilds.add(((Sign) child).toProduct());
 			else newChilds.add(child);
 		}
 		values = newChilds.toArray(new Element[newChilds.size()]);
@@ -101,6 +99,9 @@ public class Addition extends Element{
         
         ArrayList<Element> newValues = elemCoef.getElementsProduct();
         if (!cste.isZero()) newValues.add(cste);
+        
+        if (newValues.size() == 0) return new Number(0);
+        else if (newValues.size() == 1) return newValues.get(0);
         
         values = newValues.toArray(new Element[newValues.size()]);
         Arrays.sort(values);

@@ -46,16 +46,16 @@ public class ElementCoef {
 	
 	public Element getElementProduct(int index)
 	{
-		if (coefs.get(index).isEqual(new Number(1)))
-			return elements.get(index).clonedSimplify();
-		if (elements.get(index).getType() == ElementType.Product)
+		Number coef = coefs.get(index);
+		Element element = elements.get(index);
+		
+		if (coef.isEqual(new Number(1))) return element.clonedSimplify();
+		if (element.getType() == ElementType.Product)
 		{
-			Element[] values = elements.get(index).getValues();
-			Element[] newValues = Arrays.copyOf(values, values.length + 1);
-			newValues[newValues.length - 1] = coefs.get(index);
+			Element[] newValues = Tools.addToArray(element.getValues(), coef);
 			return new Product(newValues).clonedSimplify();
 		}
-		return new Product(coefs.get(index), elements.get(index)).clonedSimplify();
+		return new Product(coef, element).clonedSimplify();
 	}
 	
 	public Element getElementPower(int index)
@@ -69,7 +69,11 @@ public class ElementCoef {
 	{
 		ArrayList<Element> newElements = new ArrayList<Element>();
 		for (int i = 0; i < elements.size(); i++) {
-			newElements.add(getElementProduct(i));
+			Element elem = getElementProduct(i);
+			
+			if (elem.getType() == ElementType.Number && ((Number) elem).isZero()) continue;
+				
+			newElements.add(elem);
 		}
 		return newElements;
 	}
@@ -78,7 +82,11 @@ public class ElementCoef {
 	{
 		ArrayList<Element> newElements = new ArrayList<Element>();
 		for (int i = 0; i < elements.size(); i++) {
-			newElements.add(getElementPower(i));
+			Element elem = getElementProduct(i);
+			
+			if (elem.getType() == ElementType.Number && ((Number) elem).isEqual(new Number(1))) continue;
+				
+			newElements.add(elem);
 		}
 		return newElements;
 	}

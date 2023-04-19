@@ -1,5 +1,7 @@
 package com.exemple.main;
 
+import java.util.Arrays;
+
 import com.exemple.latex.*;
 import com.exemple.math.ParentClass.*;
 import com.exemple.math.ParentsElements.AritmeticSequence;
@@ -9,21 +11,22 @@ import com.exemple.math.math.MathN;
 import com.exemple.math.numbers.GlobalVariable;
 import com.exemple.math.numbers.Number;
 import com.exemple.math.numbers.Variable;
+import com.exemple.math.string_converter.StringConverter;
 
 public class Main {
 
 	public static void main(String[] args) {
 
 		
-		System.out.println( new Product(x, y));
-		System.out.println( new Product(y, x));
+		print(StringConverter.stringToElement("a^2 + 2ab + b^2"));
 		
+		//LaTex latex = new LaTex(pythagore.toLaTeX());
 		
-		LaTex latex = new LaTex(pythagore.toLaTeX());
-		
-		new Frame("Title", latex, 1000, 500, 50);
+		//new Frame("Title", latex, 1000, 500, 50);
 	}
 	
+	static <T> void print(T str) { System.out.println(str.toString()); }
+	static void print(String str) { System.out.println(str); }
 	
 	static Variable a = new Variable("a");
 	static Variable b = new Variable("b");

@@ -20,5 +20,8 @@ public class ErrorMessage {
     public static RuntimeException NotImplemented() {
         return new RuntimeException("Not implemented");
     }
+    public static RuntimeException IndeterminedString(String str) {
+        return new RuntimeException("The converter doesn't understand the string \"" + str + "\"");
+    }
     
 }

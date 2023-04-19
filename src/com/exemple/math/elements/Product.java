@@ -77,8 +77,6 @@ public class Product extends Element{
 		{
 			if (child.getType() == ElementType.Product)
 				newChilds.addAll(Arrays.asList(child.getValues()));
-			else if (child.getType() == ElementType.Sign)
-				newChilds.addAll(Arrays.asList(((Sign) child).toProduct().getValues()));
 			else newChilds.add(child);
 		}
 		values = newChilds.toArray(new Element[newChilds.size()]);

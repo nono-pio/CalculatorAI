@@ -42,7 +42,7 @@ public class Power extends Element {
 			str = "{" + base.toString(getType(), isLaTeX) + "}^{" + exponent.toString(getType(), isLaTeX) +"}";
 		else
 			str = "(" + base.toString(getType(), isLaTeX) + ")^(" + exponent.toString(getType(), isLaTeX) +")";
-		if (parentType == ElementType.Power || parentType == ElementType.Sign)
+		if (parentType == ElementType.Power)
 			return StringFormat.bracket(str, isLaTeX);
 		else return str;
 	}
