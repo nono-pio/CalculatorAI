@@ -17,8 +17,11 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		StringConverter str = new StringConverter(" a^2 + b*2 ");
+		Element element = str.toElement();
 		
-		print(StringConverter.stringToElement("a^2 + 2ab + b^2"));
+		print(str + " = " + element);
+		//element.forEach((e, p) -> print(e.getType()));
 		
 		//LaTex latex = new LaTex(pythagore.toLaTeX());
 		
