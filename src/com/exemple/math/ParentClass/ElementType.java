@@ -4,7 +4,7 @@ public enum ElementType {
     Number,
     Variable,
     
-    Polynome,
+    Form,
 
     Addition,
     Product,

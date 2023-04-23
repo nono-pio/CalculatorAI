@@ -7,6 +7,7 @@ import com.exemple.math.ParentClass.*;
 import com.exemple.math.ParentsElements.AritmeticSequence;
 import com.exemple.math.ParentsElements.Equation;
 import com.exemple.math.elements.*;
+import com.exemple.math.forms.Polynome;
 import com.exemple.math.math.MathN;
 import com.exemple.math.numbers.GlobalVariable;
 import com.exemple.math.numbers.Number;
@@ -17,11 +18,11 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		StringConverter str = new StringConverter(" a^2 + b*2 ");
-		Element element = str.toElement();
+		Form element = new Polynome(x, new Element[] {n1, n2, n5});
 		
-		print(str + " = " + element);
-		//element.forEach((e, p) -> print(e.getType()));
+		print(element + " = " + element.toElement());
+		//print("");
+		//element.forEach((e, p) -> print(e.getType() + " : " + e));
 		
 		//LaTex latex = new LaTex(pythagore.toLaTeX());
 		

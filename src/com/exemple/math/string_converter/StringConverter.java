@@ -21,11 +21,9 @@ public class StringConverter {
 	
 	
 	public Element toElement()
-	{
+	{ 
 		
-		String str = string.replace(" ", ""); 
-		
-		StringBuilder curNumber = new StringBuilder();
+		StringBuilder curString = new StringBuilder();
 		
 		ElementNode rootNode = new ElementNode(PriorityOperator.Root);
 		
@@ -40,23 +38,54 @@ public class StringConverter {
 		
 		boolean lastIsMathSymbol = true;
 		
+		int bracket = 0;
+		boolean onBracket = false;
 		
-		for (char c : str.toCharArray()) {
+		for (char c : string.toCharArray()) {
 			
-			System.out.println(rootNode + " : " + rootElement);
+			if (c == ' ') continue;
+			
+			if (c == '(')
+			{
+				if (bracket != 0) curString.append(c);
+				
+				onBracket = true;
+				bracket++;
+				continue;
+				
+			}else if (c == ')')
+			{
+				bracket--;
+				if (bracket == 0)
+				{
+					onBracket = false;
+					rootElement.add( new StringConverter(curString.toString()).toElement() );
+					rootNode = rootNode.addChild(new ElementNode(rootElement.size() - 1));
+					curString = new StringBuilder();
+				} else
+				{
+					curString.append(c);
+				}
+				continue;
+				
+			}else if (onBracket)
+			{
+				curString.append(c);
+				continue;
+			}
 			
 			if (Character.isDigit(c) || ",.".indexOf(c) != -1) // if integer or , or .
 			{
-				curNumber.append(c);
+				curString.append(c);
 				continue;
 				
-			} else if (!curNumber.isEmpty()) //if number isn't empty add to rootElem
+			} else if (!curString.isEmpty()) //if number isn't empty add to rootElem
 			{
-				String numStr = curNumber.toString();
+				String numStr = curString.toString();
 				if (!numStr.matches(numberPatern)) throw ErrorMessage.IndeterminedString(numStr);
 				rootElement.add(new Number(Float.valueOf(numStr.replace(',', '.'))));
 				rootNode = rootNode.addChild(new ElementNode(rootElement.size() - 1));
-				curNumber = new StringBuilder();
+				curString = new StringBuilder();
 			}
 			
 			boolean isMathSymbol = true;
@@ -94,13 +123,13 @@ public class StringConverter {
 			}
 		}
 		
-		if (!curNumber.isEmpty())
+		if (!curString.isEmpty())
 		{
-			String numStr = curNumber.toString();
+			String numStr = curString.toString();
 			if (!numStr.matches(numberPatern)) throw ErrorMessage.IndeterminedString(numStr);
 			rootElement.add(new Number(Float.valueOf(numStr.replace(',', '.'))));
 			rootNode = rootNode.addChild(new ElementNode(rootElement.size() - 1));
-			curNumber = new StringBuilder();
+			curString = new StringBuilder();
 		}
 		
 		return rootNode.toElement(rootElement);

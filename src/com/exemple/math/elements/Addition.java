@@ -2,6 +2,7 @@ package com.exemple.math.elements;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.exemple.math.ParentClass.Element;
 import com.exemple.math.ParentClass.ElementType;
@@ -25,9 +26,10 @@ public class Addition extends Element{
             this.values = new Element[] {value1, value2};
     }
     public Addition(Element value1, Element value2, Element value3) { this.values = new Element[] {value1, value2, value3}; }
-
+    public Addition(List<Element> list) {
+		this.values = list.toArray(new Element[list.size()]); }
     
-    public Number toValue() {
+	public Number toValue() {
         Number sum = new Number(0);
         for (Element value : values) {
             sum.add(value.toValue());

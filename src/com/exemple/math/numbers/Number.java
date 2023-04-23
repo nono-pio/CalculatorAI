@@ -6,6 +6,9 @@ import com.exemple.math.tools.ErrorMessage;
 
 public class Number extends Element{
     
+	public static final Number zero = new Number(0);
+	
+	
 	public float value;
     public NumberType numberType;
 
